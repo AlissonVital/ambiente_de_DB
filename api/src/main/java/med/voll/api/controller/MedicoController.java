@@ -6,14 +6,15 @@ import med.voll.api.medico.DadosCadastroMedico;
 import med.voll.api.medico.DadosListagemMedico;
 import med.voll.api.medico.Medico;
 import med.voll.api.medico.MedicoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("medicos")
@@ -30,14 +31,9 @@ public class MedicoController {
         System.out.println(dados);
     }
 
+
     @GetMapping
-    public List<DadosListagemMedico> listar() {
-        //DadosListagemMedico- CRIADO UM DTO
-        //medicoRepository- UTILISADO O REPOSITORY PARA FAZER A BUSCA
-        //findAll()- UTILISADO PARA BUSCAR TODOS
-        //PARA O DadosListagemMedico TRASER A LISTA, É NECESSARIO FAZER UMA CONVERÇÃO:
-        //stream().map(DadosListagemMedico::new)- REALIZAR O MAPEAMENTO DO CONSTRUTOR CRIADO NA CLASSE DTO ATRAVÉS DESSE CHAMADO (DadosListagemMedico::new)
-        //toList()- FAZ A CONVERSAO DE TODOS OS DADOS, CONSTRUTORES EM UMA LISTA
-        return medicoRepository.findAll().stream().map(DadosListagemMedico::new).toList();
+    public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
+        return medicoRepository.findAll(paginacao).map(DadosListagemMedico::new);
     }
 }
