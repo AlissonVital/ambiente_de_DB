@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import med.voll.api.medico.DadosCadastroMedico;
 import med.voll.api.medico.DadosListagemMedico;
+import med.voll.api.medico.DadosUpDateMedico;
 import med.voll.api.medico.Medico;
 import med.voll.api.medico.MedicoRepository;
 import org.springframework.data.domain.Page;
@@ -12,6 +13,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,9 +33,15 @@ public class MedicoController {
         System.out.println(dados);
     }
 
-
     @GetMapping
     public Page<DadosListagemMedico> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable paginacao) {
         return medicoRepository.findAll(paginacao).map(DadosListagemMedico::new);
+    }
+
+    @PutMapping
+    @Transactional
+    public void upDate(@RequestBody @Valid DadosUpDateMedico dados){
+        var medico = medicoRepository.getReferenceById(dados.id());
+        medico.upDateInformacoesMedico(dados);
     }
 }
