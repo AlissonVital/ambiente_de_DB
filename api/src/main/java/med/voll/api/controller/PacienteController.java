@@ -53,4 +53,11 @@ public class PacienteController {
         var paciente = pacienteRepository.getReferenceById(id);
         paciente.excluir();
     }
+
+    @PutMapping("/{id}")
+    @Transactional
+    public void recuperar(@PathVariable Long id) {
+        var paciente = pacienteRepository.getReferenceById(id);
+        paciente.recuperar();
+    }
 }

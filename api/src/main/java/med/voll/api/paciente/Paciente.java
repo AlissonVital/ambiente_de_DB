@@ -58,4 +58,8 @@ public class Paciente {
     public void excluir() {
         this.ativo = false;
     }
+
+    public void recuperar() {
+        this.ativo = true;
+    }
 }
